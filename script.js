@@ -51,9 +51,12 @@ const typedPreviewEl = document.getElementById("typedPreview");
 const modeSelect = document.getElementById("modeSelect");
 const startButton = document.getElementById("startButton");
 const restartButton = document.getElementById("restartButton");
+const shareButton = document.getElementById("shareButton");
+const shareStatus = document.getElementById("shareStatus");
 const gameOverScreen = document.getElementById("gameOverScreen");
 const gameOverSummary = document.getElementById("gameOverSummary");
 const gameArea = document.getElementById("gameArea");
+const mobileInput = document.getElementById("mobileInput");
 
 let targets = [];
 let nextId = 1;
@@ -64,6 +67,7 @@ let spawnTimeoutId = null;
 let lastFrameTime = 0;
 let letterPool = [];
 let wordPool = [];
+let lastMobileValue = "";
 
 function createInitialState() {
   return {
@@ -104,6 +108,30 @@ function setMessage(text) {
   messageEl.textContent = text;
 }
 
+function isMobileViewport() {
+  return window.matchMedia("(max-width: 900px)").matches;
+}
+
+function focusMobileInput() {
+  if (!isMobileViewport()) {
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    mobileInput.focus({ preventScroll: true });
+    mobileInput.click();
+  });
+}
+
+function setShareStatus(text) {
+  shareStatus.textContent = text;
+}
+
+function buildShareText() {
+  const modeLabel = gameState.mode === "letters" ? "Letters" : "Words";
+  return `I scored ${gameState.score} in Skyfall Typist on ${modeLabel} mode, cleared ${gameState.clears} targets, and reached level ${gameState.level}. Can you beat me?`;
+}
+
 function resetGame() {
   clearTimeout(spawnTimeoutId);
   cancelAnimationFrame(animationFrameId);
@@ -117,7 +145,10 @@ function resetGame() {
   lastFrameTime = 0;
   letterPool = [];
   wordPool = [];
+  lastMobileValue = "";
+  mobileInput.value = "";
   gameOverScreen.classList.add("hidden");
+  setShareStatus("");
   updateHud();
 }
 
@@ -125,10 +156,12 @@ function startGame() {
   resetGame();
   startButton.blur();
   restartButton.blur();
+  document.body.classList.add("game-active");
   gameState.mode = modeSelect.value;
   gameState.running = true;
   setMessage("Targets incoming. Type the glowing target before it hits the line.");
   updateHud();
+  focusMobileInput();
   spawnTarget();
   queueNextSpawn();
   animationFrameId = requestAnimationFrame(gameLoop);
@@ -272,10 +305,13 @@ function endGame() {
   gameState.running = false;
   clearTimeout(spawnTimeoutId);
   cancelAnimationFrame(animationFrameId);
+  document.body.classList.remove("game-active");
   setMessage(`Game over. Final score: ${gameState.score}. Press start to jump back in.`);
   activeInput = "";
   gameOverSummary.textContent = `Final score: ${gameState.score} • Cleared: ${gameState.clears} • Reached level ${gameState.level}`;
   gameOverScreen.classList.remove("hidden");
+  setShareStatus("");
+  mobileInput.blur();
   updateHud();
 }
 
@@ -356,6 +392,12 @@ function handleTypedCharacter(key) {
   }
 }
 
+function handleCharacterInput(value) {
+  if (/^[a-zA-Z]$/.test(value)) {
+    handleTypedCharacter(value);
+  }
+}
+
 document.addEventListener("keydown", (event) => {
   if (event.repeat) {
     return;
@@ -380,8 +422,84 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+mobileInput.addEventListener("beforeinput", (event) => {
+  if (!gameState.running) {
+    return;
+  }
+
+  if (event.inputType === "deleteContentBackward") {
+    activeInput = activeInput.slice(0, -1);
+    updateHud();
+    highlightBestMatch();
+    return;
+  }
+
+  if (event.data && /^[a-zA-Z]$/.test(event.data)) {
+    event.preventDefault();
+    handleCharacterInput(event.data);
+  }
+});
+
+mobileInput.addEventListener("input", () => {
+  const value = mobileInput.value.toUpperCase();
+
+  if (!gameState.running) {
+    mobileInput.value = "";
+    lastMobileValue = "";
+    return;
+  }
+
+  if (value.length < lastMobileValue.length) {
+    activeInput = activeInput.slice(0, -1);
+    updateHud();
+    highlightBestMatch();
+  } else if (value.length > lastMobileValue.length) {
+    const latest = value.at(-1);
+    handleCharacterInput(latest);
+  }
+
+  lastMobileValue = value;
+  mobileInput.value = "";
+  lastMobileValue = "";
+});
+
+gameArea.addEventListener("pointerdown", () => {
+  focusMobileInput();
+});
+
 startButton.addEventListener("click", startGame);
 restartButton.addEventListener("click", startGame);
+
+shareButton.addEventListener("click", async () => {
+  const shareText = buildShareText();
+  const shareData = {
+    title: "Skyfall Typist",
+    text: shareText,
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+      setShareStatus("Score shared.");
+      return;
+    }
+
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(shareText);
+      setShareStatus("Score copied to clipboard.");
+      return;
+    }
+
+    setShareStatus("Sharing is not supported in this browser.");
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      setShareStatus("Share canceled.");
+      return;
+    }
+
+    setShareStatus("Could not share score.");
+  }
+});
 
 modeSelect.addEventListener("change", () => {
   activeInput = "";

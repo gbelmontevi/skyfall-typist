@@ -124,7 +124,8 @@ h1 {
 }
 
 select,
-.primary-button {
+.primary-button,
+.secondary-button {
   border: 0;
   border-radius: 16px;
   min-height: 52px;
@@ -146,10 +147,28 @@ select {
   cursor: pointer;
   transition: transform 160ms ease, box-shadow 160ms ease;
   box-shadow: 0 16px 30px rgba(255, 138, 61, 0.28);
+  touch-action: manipulation;
 }
 
 .primary-button:hover {
   transform: translateY(-2px);
+}
+
+.secondary-button {
+  flex: 1 1 160px;
+  font-weight: 700;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  touch-action: manipulation;
+}
+
+.secondary-button:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 .status-row {
@@ -176,6 +195,15 @@ select {
   height: 100%;
   min-height: 520px;
   overflow: hidden;
+}
+
+.mobile-input {
+  position: fixed;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .hidden {
@@ -346,6 +374,19 @@ select {
   line-height: 1.6;
 }
 
+.game-over-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.share-status {
+  min-height: 1.3em;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 @keyframes pop-away {
   0% {
     opacity: 1;
@@ -415,13 +456,143 @@ select {
 
   .game-panel,
   .game-area {
-    height: min(60vh, 520px);
+    height: min(56vh, 520px);
     min-height: 420px;
   }
 
   .hud-card {
     height: auto;
     min-height: 0;
+    padding: 18px 16px;
+    gap: 14px;
+  }
+
+  .hud-card h1 {
+    font-size: clamp(1.8rem, 7vw, 2.5rem);
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stat {
+    padding: 12px 10px;
+    border-radius: 16px;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+  }
+
+  .stat strong {
+    font-size: 1.2rem;
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .toggle-group,
+  .primary-button {
+    flex: none;
+  }
+
+  .toggle-group span {
+    font-size: 0.82rem;
+  }
+
+  select,
+  .primary-button,
+  .secondary-button {
+    min-height: 56px;
+    font-size: 16px;
+  }
+
+  .status-row {
+    margin-top: 0;
+  }
+
+  .typed-preview {
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .game-over-card {
+    width: min(100%, 420px);
+    padding: 22px 18px;
+  }
+
+  .game-over-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .share-status {
+    font-size: 0.88rem;
+  }
+
+  body.game-active .app-shell {
+    gap: 10px;
+  }
+
+  body.game-active .hud-card {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  body.game-active .hud-intro .subtitle,
+  body.game-active .message {
+    display: none;
+  }
+
+  body.game-active .hud-card h1 {
+    font-size: clamp(1.3rem, 5vw, 1.6rem);
+  }
+
+  body.game-active .stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  body.game-active .stat {
+    padding: 8px 6px;
+    border-radius: 12px;
+  }
+
+  body.game-active .stat-label {
+    font-size: 0.58rem;
+    margin-bottom: 2px;
+  }
+
+  body.game-active .stat strong {
+    font-size: 0.92rem;
+  }
+
+  body.game-active .controls {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  body.game-active .toggle-group {
+    grid-column: 1 / -1;
+  }
+
+  body.game-active select,
+  body.game-active .primary-button {
+    min-height: 50px;
+  }
+
+  body.game-active .typed-preview {
+    font-size: 0.8rem;
+    padding: 8px 10px;
+  }
+
+  body.game-active .game-panel,
+  body.game-active .game-area {
+    height: min(62vh, 560px);
   }
 }
 

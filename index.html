@@ -15,7 +15,7 @@
   <body>
     <main class="app-shell">
       <section class="hud-card">
-        <div>
+        <div class="hud-intro">
           <p class="eyebrow">Typing Arcade</p>
           <h1>Skyfall Typist</h1>
           <p class="subtitle">
@@ -84,13 +84,30 @@
             <p id="gameOverSummary" class="game-over-summary">
               Final score: 0
             </p>
-            <button id="restartButton" class="primary-button" type="button">
-              Play Again
-            </button>
+            <div class="game-over-actions">
+              <button id="restartButton" class="primary-button" type="button">
+                Play Again
+              </button>
+              <button id="shareButton" class="secondary-button" type="button">
+                Share Score
+              </button>
+            </div>
+            <p id="shareStatus" class="share-status" aria-live="polite"></p>
           </div>
         </div>
       </section>
     </main>
+
+    <input
+      id="mobileInput"
+      class="mobile-input"
+      type="text"
+      inputmode="text"
+      autocomplete="off"
+      autocapitalize="characters"
+      spellcheck="false"
+      aria-label="Mobile typing input"
+    />
 
     <script src="./script.js"></script>
   </body>
