@@ -197,13 +197,8 @@ select {
   overflow: hidden;
 }
 
-.mobile-input {
-  position: fixed;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
+.mobile-input-shell {
+  display: none;
 }
 
 .hidden {
@@ -524,6 +519,42 @@ select {
     padding: 22px 18px;
   }
 
+  .mobile-input-shell {
+    position: sticky;
+    bottom: 0;
+    z-index: 8;
+    display: grid;
+    gap: 6px;
+    width: min(100vw - 20px, 760px);
+    margin: 0 auto 10px;
+    padding: 10px;
+    border-radius: 18px;
+    background: rgba(8, 12, 22, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 14px 34px rgba(1, 7, 18, 0.35);
+  }
+
+  .mobile-input-label {
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  .mobile-input {
+    width: 100%;
+    min-height: 52px;
+    padding: 0 14px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    font: inherit;
+    font-size: 16px;
+  }
+
+  .mobile-input::placeholder {
+    color: rgba(168, 179, 207, 0.72);
+  }
+
   .game-over-actions {
     display: grid;
     grid-template-columns: 1fr;
@@ -593,6 +624,10 @@ select {
   body.game-active .game-panel,
   body.game-active .game-area {
     height: min(62vh, 560px);
+  }
+
+  body.game-active .mobile-input-shell {
+    display: grid;
   }
 }
 

@@ -56,6 +56,7 @@ const shareStatus = document.getElementById("shareStatus");
 const gameOverScreen = document.getElementById("gameOverScreen");
 const gameOverSummary = document.getElementById("gameOverSummary");
 const gameArea = document.getElementById("gameArea");
+const mobileInputShell = document.getElementById("mobileInputShell");
 const mobileInput = document.getElementById("mobileInput");
 
 let targets = [];
@@ -118,8 +119,8 @@ function focusMobileInput() {
   }
 
   requestAnimationFrame(() => {
-    mobileInput.focus({ preventScroll: true });
-    mobileInput.click();
+    mobileInput.focus();
+    mobileInput.setSelectionRange(mobileInput.value.length, mobileInput.value.length);
   });
 }
 
@@ -147,6 +148,7 @@ function resetGame() {
   wordPool = [];
   lastMobileValue = "";
   mobileInput.value = "";
+  document.body.classList.remove("game-active");
   gameOverScreen.classList.add("hidden");
   setShareStatus("");
   updateHud();
@@ -464,6 +466,10 @@ mobileInput.addEventListener("input", () => {
 });
 
 gameArea.addEventListener("pointerdown", () => {
+  focusMobileInput();
+});
+
+mobileInputShell.addEventListener("pointerdown", () => {
   focusMobileInput();
 });
 

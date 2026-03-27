@@ -98,16 +98,19 @@
       </section>
     </main>
 
-    <input
-      id="mobileInput"
-      class="mobile-input"
-      type="text"
-      inputmode="text"
-      autocomplete="off"
-      autocapitalize="characters"
-      spellcheck="false"
-      aria-label="Mobile typing input"
-    />
+    <div class="mobile-input-shell" id="mobileInputShell">
+      <label class="mobile-input-label" for="mobileInput">Tap here to type on mobile</label>
+      <input
+        id="mobileInput"
+        class="mobile-input"
+        type="text"
+        inputmode="text"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        aria-label="Mobile typing input"
+      />
+    </div>
 
     <script src="./script.js"></script>
   </body>
