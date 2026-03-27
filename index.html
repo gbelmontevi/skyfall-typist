@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skyfall Typist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hud-card">
+        <div>
+          <p class="eyebrow">Typing Arcade</p>
+          <h1>Skyfall Typist</h1>
+          <p class="subtitle">
+            Clear falling targets before they land. Type letters or full words,
+            build streaks, and survive the speed ramp.
+          </p>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat">
+            <span class="stat-label">Score</span>
+            <strong id="score">0</strong>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Lives</span>
+            <strong id="lives">5</strong>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Level</span>
+            <strong id="level">1</strong>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Clears</span>
+            <strong id="clears">0</strong>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Mode</span>
+            <strong id="modeLabel">Letters</strong>
+          </article>
+        </div>
+
+        <div class="controls">
+          <label class="toggle-group" for="modeSelect">
+            <span>Mode</span>
+            <select id="modeSelect">
+              <option value="letters">Letters</option>
+              <option value="words">Words</option>
+            </select>
+          </label>
+
+          <button id="startButton" class="primary-button" type="button">
+            Start Game
+          </button>
+        </div>
+
+        <div class="status-row">
+          <p id="message" class="message">
+            Press start, then type what you see before it reaches the bottom.
+          </p>
+          <p id="typedPreview" class="typed-preview">Typed: —</p>
+        </div>
+      </section>
+
+      <section class="game-panel">
+        <div class="lane-glow lane-glow-left"></div>
+        <div class="lane-glow lane-glow-right"></div>
+        <div id="gameArea" class="game-area" aria-label="Game area"></div>
+        <div class="floor-glow"></div>
+        <div class="floor">
+          <div class="floor-grid"></div>
+        </div>
+        <div id="gameOverScreen" class="game-over-screen hidden" aria-live="polite">
+          <div class="game-over-card">
+            <p class="eyebrow">Round Complete</p>
+            <h2>Game Over</h2>
+            <p id="gameOverSummary" class="game-over-summary">
+              Final score: 0
+            </p>
+            <button id="restartButton" class="primary-button" type="button">
+              Play Again
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
